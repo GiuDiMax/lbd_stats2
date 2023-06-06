@@ -3,7 +3,6 @@ import requests
 import lxml
 from bs4 import BeautifulSoup, SoupStrainer
 import pickle
-import time
 
 
 async def fetch_page(url):
@@ -17,8 +16,10 @@ async def scrape_page(page):
     movie['id'] = soup.find('div', class_='film-poster')['data-film-id']
     for link in soup.find_all('a', class_='micro-button'):
         if 'tmdb' in link['data-track-action'].lower():
-            movie['tmdb'] = int(link['href'].split('/')[-2])
-            movie['type'] = link['href'].split('/')[-3]
+            if link['href'].split('/')[-3] == 'movie':
+                movie['tmdb'] = int(link['href'].split('/')[-2])
+            else:
+                movie['tmdb_tv'] = int(link['href'].split('/')[-2])
             break
     return movie
 
@@ -51,8 +52,20 @@ def get_tmdb():
         urls.append(base_url + film['slug'])
     loop = asyncio.get_event_loop()
     data = loop.run_until_complete(main(urls))
-    with open("tmdb", 'wb') as file:
-        pickle.dump(data, file)
+    #with open("tmdb", 'wb') as file:
+    #    pickle.dump(data, file)
+    return data
+
+
+def get_tmdb2(lista):
+    base_url = "https://letterboxd.com/film/"
+    urls = []
+    for film in lista:
+        urls.append(base_url + film)
+    loop = asyncio.get_event_loop()
+    data = loop.run_until_complete(main(urls))
+    #with open("tmdb", 'wb') as file:
+    #    pickle.dump(data, file)
     return data
 
 
