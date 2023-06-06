@@ -8,4 +8,3 @@ with open('diary', 'rb') as file:
 with open('links', 'rb') as file:
     links = pickle.load(file)
 
-    
