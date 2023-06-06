@@ -40,7 +40,7 @@ def credits_tv(url, rating, slug):
 def main():
     global t_cast
     t_cast = []
-    key = '6fff7e293df6a808b97101a26c86a545'
+    key = 'YOUR TMDB KEY'
     film, tv = lbd_to_tmdb()
     url = "https://api.themoviedb.org/3/movie/{}/credits?language=en-US&api_key="+key
     url_tv = "https://api.themoviedb.org/3/tv/{}/credits?language=en-US&api_key="+key
