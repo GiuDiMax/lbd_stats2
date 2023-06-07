@@ -2,7 +2,7 @@ import asyncio
 import requests
 import lxml
 from bs4 import BeautifulSoup, SoupStrainer
-from utilsDB import add_tmdbDB
+from utils.utilsDB import add_tmdbDB, get_watchDB
 
 
 async def fetch_page(url):

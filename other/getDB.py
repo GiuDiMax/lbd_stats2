@@ -1,6 +1,5 @@
 import pandas as pd
-import pickle
-from lbd_to_tmdb import lbd_to_tmdb
+from utils.lbd_to_tmdb import lbd_to_tmdb
 import requests
 from threading import Thread, Semaphore
 import json

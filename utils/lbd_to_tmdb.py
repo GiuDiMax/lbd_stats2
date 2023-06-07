@@ -1,7 +1,7 @@
 import pandas as pd
 import pickle
-from set_tmdb import get_tmdb2
-from utilsDB import add_tmdbDB, get_watchDB
+from utils.set_tmdb import get_tmdb2
+from utils.utilsDB import add_tmdbDB, get_watchDB
 
 
 def lbd_to_tmdb():
@@ -9,7 +9,7 @@ def lbd_to_tmdb():
     for w in get_watchDB():
         watch.append({'id': w[0]})
     watch = pd.DataFrame(watch)
-    with open('links', 'rb') as file:
+    with open('utils\\links', 'rb') as file:
         links = pd.DataFrame(pickle.load(file))
 
     links["id"] = pd.to_numeric(links["id"], errors='ignore', downcast='unsigned')

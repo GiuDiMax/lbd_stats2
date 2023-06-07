@@ -1,16 +1,10 @@
-from createDB import initializedb
-from diary import get_diary
-from watch import get_watched
-from lbd_to_tmdb import lbd_to_tmdb
-from threading import Thread
+from utils.createDB import initializedb
+from utils.diary import get_diary
+from utils.watch import get_watched
+from utils.lbd_to_tmdb import lbd_to_tmdb
+from config import username
 
-user = 'giudimax'
 initializedb()
-
-t1 = Thread(target=get_watched, args=(user, ))
-t2 = Thread(target=get_diary, args=(user, ))
-t1.start()
-t2.start()
-t1.join()
-t2.join()
+get_watched(username)
+get_diary(username)
 lbd_to_tmdb()

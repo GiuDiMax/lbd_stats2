@@ -2,8 +2,7 @@ import asyncio
 import requests
 import lxml
 from bs4 import BeautifulSoup, SoupStrainer
-import sqlite3 as sl
-from utilsDB import add_diaryDB
+from utils.utilsDB import add_diaryDB
 
 
 async def fetch_page(url):
