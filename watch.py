@@ -2,7 +2,7 @@ import asyncio
 import requests
 import lxml
 from bs4 import BeautifulSoup, SoupStrainer
-import pickle
+from utilsDB import add_watchDB
 
 
 async def fetch_page(url):
@@ -52,8 +52,10 @@ async def main(username):
 def get_watched(username):
     loop = asyncio.get_event_loop()
     data = loop.run_until_complete(main(username))
-    with open("watch", 'wb') as file:
-        pickle.dump(data, file)
+    data2 = []
+    for element in data:
+        data2.append((element['id'], element['slug'], element['like'], element['rating']))
+    add_watchDB(data2)
     return data
 
 

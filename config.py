@@ -1,0 +1,1 @@
+dbname = 'letterboxd.db'

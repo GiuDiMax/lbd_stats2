@@ -1,15 +1,14 @@
 import pandas as pd
 import pickle
-from get_tmdb import get_tmdb2
+from set_tmdb import get_tmdb2
+from utilsDB import add_tmdbDB, get_watchDB
 
 
-def lbd_to_tmdb(diary=False, year=0):
-    if diary:
-        with open('diary', 'rb') as file:
-            diary = pd.DataFrame(pickle.load(file))
-    else:
-        with open('watch', 'rb') as file:
-            watch = pd.DataFrame(pickle.load(file))
+def lbd_to_tmdb():
+    watch = []
+    for w in get_watchDB():
+        watch.append({'id': w[0]})
+    watch = pd.DataFrame(watch)
     with open('links', 'rb') as file:
         links = pd.DataFrame(pickle.load(file))
 
@@ -29,15 +28,14 @@ def lbd_to_tmdb(diary=False, year=0):
         new = pd.merge(watch, new, on='id', how='right', indicator=True)
         df = pd.concat([df, new])
 
-    film = []
-    tv = []
-    #print(df)
+    data2 = []
     for index, row in df.iterrows():
         if str(row['tmdb']) != 'nan':
-            film.append({'tmdb': int(row['tmdb']), 'r': row['rating'], 'slug': row['slug']})
+            data2.append((row['id'], row['tmdb'], False))
         else:
-            tv.append({'tmdb': int(row['tmdb_tv']), 'r': row['rating'], 'slug': row['slug']})
-    return film, tv
+            data2.append((row['id'], row['tmdb_tv'], True))
+    add_tmdbDB(data2)
+    return data2
 
 
 if __name__ == "__main__":

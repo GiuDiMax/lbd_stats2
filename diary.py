@@ -2,7 +2,8 @@ import asyncio
 import requests
 import lxml
 from bs4 import BeautifulSoup, SoupStrainer
-import pickle
+import sqlite3 as sl
+from utilsDB import add_diaryDB
 
 
 async def fetch_page(url):
@@ -29,7 +30,7 @@ async def main(username):
     response = await fetch_page(base_url)
     soup = BeautifulSoup(response, 'lxml', parse_only=SoupStrainer('li', {'class': 'paginate-page'}))
     pages = int(soup.find_all('li', class_='paginate-page')[-1].text)
-
+    #pages = 2
     tasks = []
     for page in range(1, pages + 1):
         url = base_url + "page/" + str(page)
@@ -47,8 +48,10 @@ async def main(username):
 def get_diary(username):
     loop = asyncio.get_event_loop()
     data = loop.run_until_complete(main(username))
-    with open("diary", 'wb') as file:
-        pickle.dump(data, file)
+    data2 = []
+    for element in data:
+        data2.append((element['id'], element['like'], element['rewatch'], element['rating']))
+    add_diaryDB(data2)
     return data
 
 

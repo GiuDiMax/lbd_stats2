@@ -2,7 +2,7 @@ import asyncio
 import requests
 import lxml
 from bs4 import BeautifulSoup, SoupStrainer
-import pickle
+from utilsDB import add_tmdbDB
 
 
 async def fetch_page(url):
@@ -46,14 +46,18 @@ async def main(pages):
 def get_tmdb():
     base_url = "https://letterboxd.com/film/"
     urls = []
-    with open('watch', 'rb') as file:
-        watch = pickle.load(file)
+    watch = get_watchDB(True)
     for film in watch:
-        urls.append(base_url + film['slug'])
+        urls.append(base_url + film)
     loop = asyncio.get_event_loop()
     data = loop.run_until_complete(main(urls))
-    #with open("tmdb", 'wb') as file:
-    #    pickle.dump(data, file)
+    data2 = []
+    for element in data:
+        if 'tmdb_tv' in element:
+            data2.append((element['id'], element['tmdb_tv'], True))
+        else:
+            data2.append((element['id'], element['tmdb'], False))
+    add_tmdbDB(data2)
     return data
 
 
@@ -64,8 +68,6 @@ def get_tmdb2(lista):
         urls.append(base_url + film)
     loop = asyncio.get_event_loop()
     data = loop.run_until_complete(main(urls))
-    #with open("tmdb", 'wb') as file:
-    #    pickle.dump(data, file)
     return data
 
 
