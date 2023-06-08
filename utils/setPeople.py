@@ -4,7 +4,6 @@ from threading import Thread, Semaphore
 import json
 from utils.utilsDB import get_watchDB, add_people, add_names
 from config import *
-from keys import tmdb_api_key
 
 global sem, people
 sem = Semaphore()
