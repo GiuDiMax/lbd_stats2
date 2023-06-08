@@ -4,7 +4,7 @@ from threading import Thread, Semaphore
 import json
 from utils.utilsDB import get_watchDB, add_people, add_names
 from config import *
-
+from keys import tmdb_api_key
 
 global sem, people
 sem = Semaphore()
@@ -34,8 +34,8 @@ def credits(url, slug, tmdb):
 def setPeople():
     global people
     people = []
-    url = "https://api.themoviedb.org/3/movie/{}/credits?language=en-US&api_key="+key
-    url_tv = "https://api.themoviedb.org/3/tv/{}/credits?language=en-US&api_key="+key
+    url = "https://api.themoviedb.org/3/movie/{}/credits?language=en-US&api_key="+tmdb_api_key
+    url_tv = "https://api.themoviedb.org/3/tv/{}/credits?language=en-US&api_key="+tmdb_api_key
     th = []
     for f in get_watchDB(False, True):
         if f[2] == 1:
