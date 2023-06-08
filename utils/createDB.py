@@ -23,7 +23,6 @@ def initializedb():
             """)
         con.execute("""
             CREATE TABLE DIARY (
-                diaryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 id INTEGER,
                 like BOOLEAN,
                 rewatch BOOLEAN,
@@ -48,7 +47,6 @@ def initializedb():
 
         con.execute("""
             CREATE TABLE PEOPLE (
-                moviepersonID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 personID INTEGER,
                 tmdb INTEGER,
                 tv BOOLEAN,
