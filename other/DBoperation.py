@@ -3,13 +3,15 @@ from config import *
 
 con = sl.connect(dbname)
 with con:
-    con.execute('DROP TABLE PEOPLE;')
+    #con.execute('DROP TABLE PEOPLE;')
     con.execute("""
-            CREATE TABLE PEOPLE (
-                id INTEGER NOT NULL,
-                tmdb INTEGER NOT NULL,
-                tv BOOLEAN,
-                role STRING,
-                constraint PK PRIMARY KEY (id, tmdb, tv, role)
+            CREATE TABLE DETAILS (
+                tmdb INTEGER NOT NULL PRIMARY KEY,
+                title STRING,
+                year INTEGER,
+                runtime INTEGER,
+                genres STRING,
+                languages STRING,
+                countries STRING
             );
         """)

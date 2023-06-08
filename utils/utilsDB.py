@@ -2,14 +2,6 @@ import sqlite3 as sl
 from config import *
 
 
-def cleanDB():
-    con = sl.connect(dbname)
-    with con:
-        con.execute('DELETE FROM DIARY')
-        con.execute('DELETE FROM WATCH')
-        con.execute('DELETE FROM TMDB')
-
-
 def add_watchDB(data):
     con = sl.connect(dbname)
     with con:
@@ -31,8 +23,17 @@ def add_diaryDB(data):
 def add_tmdbDB(data):
     con = sl.connect(dbname)
     with con:
-        con.execute('DELETE FROM TMDB')
-    sql = 'INSERT INTO TMDB (id, tmdb, tv) values(?, ?, ?)'
+        con.execute('DELETE FROM DETAILS')
+    sql = 'INSERT INTO DETAILS (id, tmdb, tv) values(?, ?, ?)'
+    with con:
+        con.executemany(sql, data)
+
+
+def add_details(data):
+    con = sl.connect(dbname)
+    sql = ' REPLACE INTO DETAILS (id, tmdb, tv, title, year, runtime, genres, languages, countries)' \
+          ' values(?, ?, ?, ?, ?, ?, ?, ?, ?) '
+
     with con:
         con.executemany(sql, data)
 
@@ -61,10 +62,12 @@ def get_watchDB(slug=False, tmdb=False):
     with con:
         if slug:
             data = con.execute('SELECT SLUG FROM WATCH')
-        if tmdb:
-            data = con.execute('SELECT * FROM WATCH LEFT JOIN TMDB ON WATCH.id = TMDB.id')
         else:
-            data = con.execute('SELECT * FROM WATCH')
+            if tmdb:
+                data = con.execute('SELECT WATCH.*, DETAILS.tmdb, DETAILS.tv '\
+                                   'FROM WATCH LEFT JOIN DETAILS ON WATCH.id = DETAILS.id')
+            else:
+                data = con.execute('SELECT * FROM WATCH')
     for x in data:
         if slug:
             data2.append(x[0])

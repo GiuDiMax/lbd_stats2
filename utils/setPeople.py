@@ -34,11 +34,11 @@ def setPeople():
     url_tv = "https://api.themoviedb.org/3/tv/{}/credits?language=en-US&api_key="+tmdb_api_key
     th = []
     for f in get_watchDB(False, True):
-        if f[2] == 1:
+        if f[5] == 1:
             urlx = url_tv
         else:
             urlx = url
-        th.append(Thread(target=credits, args=(urlx.format(f[5]), f[5])))
+        th.append(Thread(target=credits, args=(urlx.format(f[4]), f[4])))
     for t in th:
         t.start()
     for t in th:

@@ -1,17 +1,18 @@
 import sqlite3 as sl
 from config import *
+import os
 
 
 def initializedb():
+    os.remove(dbname)
     con = sl.connect(dbname)
 
     with con:
-        for table in ['DIARY', 'WATCH', 'TMDB', 'PEOPLE', 'NAMES']:
+        for table in ['DIARY', 'WATCH', 'DETAILS', 'PEOPLE', 'NAMES']:
             try:
                 con.execute('DROP TABLE ' + table + ';')
             except:
                 pass
-
 
         con.execute("""
             CREATE TABLE WATCH (
@@ -21,21 +22,14 @@ def initializedb():
                 rating INTEGER
             );
             """)
+
         con.execute("""
             CREATE TABLE DIARY (
                 id INTEGER,
                 date DATE,
                 like BOOLEAN,
                 rating INTEGER,
-                rewatch BOOLEAN,
-            );
-            """)
-
-        con.execute("""
-            CREATE TABLE TMDB (
-                id INTEGER NOT NULL PRIMARY KEY,
-                tmdb INTEGER,
-                tv BOOLEAN
+                rewatch BOOLEAN
             );
             """)
 
@@ -54,4 +48,18 @@ def initializedb():
                 role STRING,
                 constraint PK PRIMARY KEY (id, tmdb, tv, role)
             );
+            """)
+
+        con.execute("""
+                CREATE TABLE DETAILS (
+                    id INTEGER NOT NULL PRIMARY KEY,
+                    tmdb INTEGER NOT NULL,
+                    tv BOOLEAN,
+                    title STRING,
+                    year INTEGER,
+                    runtime INTEGER,
+                    genres STRING,
+                    languages STRING,
+                    countries STRING
+                );
             """)
