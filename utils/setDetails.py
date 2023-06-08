@@ -5,6 +5,7 @@ import json
 from utils.utilsDB import get_watchDB, add_details
 from config import *
 from time import sleep
+import random
 
 global sem, detail
 sem = Semaphore()
@@ -12,17 +13,31 @@ sem = Semaphore()
 
 def details(url, tmdb, tv, idx):
     global detailsdf, sem
-    r = requests.get(url)
-    j = json.loads(r.text)
-    if 'success' in j and not j['success']:
-        print(j)
-        sleep(0.5)
+    try:
+        r = requests.get(url)
+        j = json.loads(r.text)
+    except:
+        sleep(random.uniform(0, 1))
         details(url, tmdb, tv, idx)
-    title = j['title']
-    year = int(j['release_date'].split("-", 1)[0])
-    runtime = int(j['runtime'])
+    if 'status_code' in j and j['status_code'] == 34:
+        return
+    if 'title' in j:
+        title = j['title']
+    else:
+        title = j['name']
+    if 'release_date' in j:
+        year = int(j['release_date'].split("-", 1)[0])
+    else:
+        year = int(j['first_air_date'].split("-", 1)[0])
+    if 'runtime' in j:
+        runtime = int(j['runtime'])
+    else:
+        try:
+            runtime = int(j['episode_run_time'][0]) * int(j['number_of_episodes'])
+        except:
+            runtime = 60 * int(j['number_of_episodes'])
     genres = ','.join(l['name'] for l in j['genres'])
-    languages = ','.join(l['name'] for l in j['spoken_languages'])
+    languages = ','.join(l['english_name'] for l in j['spoken_languages'])
     countries = ','.join(l['name'] for l in j['production_countries'])
     sem.acquire()
     detail.append((idx, tmdb, tv, title, year, runtime, genres, languages, countries))
@@ -35,11 +50,10 @@ def setDetails():
     url = "https://api.themoviedb.org/3/movie/{}?language=en-US&api_key="+tmdb_api_key
     url_tv = "https://api.themoviedb.org/3/tv/{}?language=en-US&api_key="+tmdb_api_key
     w = get_watchDB(False, True)
-    n = 100
-    for i in range(int(len(w)/n)):
+    n = 50
+    for i in range(int(len(w)/n) + 1):
         th = []
         for f in w[i*n: (i+1)*n]:
-            print(f)
             if f[5] == 1:
                 urlx = url_tv
             else:
@@ -49,7 +63,7 @@ def setDetails():
             t.start()
         for t in th:
             t.join()
-        sleep(1)
+        sleep(0.5)
     add_details(detail)
 
 
