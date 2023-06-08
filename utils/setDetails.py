@@ -35,10 +35,11 @@ def setDetails():
     url = "https://api.themoviedb.org/3/movie/{}?language=en-US&api_key="+tmdb_api_key
     url_tv = "https://api.themoviedb.org/3/tv/{}?language=en-US&api_key="+tmdb_api_key
     w = get_watchDB(False, True)
-    n = 50
-    for i in range(int(len(w)/n) + 1):
+    n = 100
+    for i in range(int(len(w)/n)):
         th = []
-        for f in w[i*n: i*n+1]:
+        for f in w[i*n: (i+1)*n]:
+            print(f)
             if f[5] == 1:
                 urlx = url_tv
             else:
@@ -48,7 +49,7 @@ def setDetails():
             t.start()
         for t in th:
             t.join()
-        sleep(0.5)
+        sleep(1)
     add_details(detail)
 
 
