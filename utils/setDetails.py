@@ -14,6 +14,10 @@ def details(url, tmdb, tv, idx):
     global detailsdf, sem
     r = requests.get(url)
     j = json.loads(r.text)
+    if 'success' in j and not j['success']:
+        print(j)
+        sleep(0.5)
+        details(url, tmdb, tv, idx)
     title = j['title']
     year = int(j['release_date'].split("-", 1)[0])
     runtime = int(j['runtime'])
@@ -44,7 +48,7 @@ def setDetails():
             t.start()
         for t in th:
             t.join()
-        sleep(1)
+        sleep(0.5)
     add_details(detail)
 
 
