@@ -23,7 +23,7 @@ def add_diaryDB(data):
     con = sl.connect(dbname)
     with con:
         con.execute('DELETE FROM DIARY')
-    sql = 'INSERT INTO DIARY (movie_id, like, rewatch, rating) values(?, ?, ?, ?)'
+    sql = 'INSERT INTO DIARY (id, like, rewatch, rating) values(?, ?, ?, ?)'
     with con:
         con.executemany(sql, data)
 
@@ -37,12 +37,32 @@ def add_tmdbDB(data):
         con.executemany(sql, data)
 
 
-def get_watchDB(slug=False):
+def add_people(data):
+    con = sl.connect(dbname)
+    with con:
+        con.execute('DELETE FROM PEOPLE')
+    sql = 'INSERT INTO PEOPLE (personID, tmdb, tv, role) values(?, ?, ?, ?)'
+    with con:
+        con.executemany(sql, data)
+
+
+def add_names(data):
+    con = sl.connect(dbname)
+    with con:
+        con.execute('DELETE FROM NAMES')
+    sql = 'INSERT INTO NAMES (id, name) values(?, ?)'
+    with con:
+        con.executemany(sql, data)
+
+
+def get_watchDB(slug=False, tmdb=False):
     data2 = []
     con = sl.connect(dbname)
     with con:
         if slug:
             data = con.execute('SELECT SLUG FROM WATCH')
+        if tmdb:
+            data = con.execute('SELECT * FROM WATCH LEFT JOIN TMDB ON WATCH.id = TMDB.id')
         else:
             data = con.execute('SELECT * FROM WATCH')
     for x in data:

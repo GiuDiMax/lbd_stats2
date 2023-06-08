@@ -6,14 +6,13 @@ def initializedb():
     con = sl.connect(dbname)
 
     with con:
-        for table in ['DIARY', 'WATCH', 'TMDB']:
+        for table in ['DIARY', 'WATCH', 'TMDB', 'PEOPLE', 'NAMES']:
             try:
                 con.execute('DROP TABLE ' + table + ';')
             except:
                 pass
 
 
-    with con:
         con.execute("""
             CREATE TABLE WATCH (
                 id INTEGER NOT NULL PRIMARY KEY,
@@ -22,23 +21,37 @@ def initializedb():
                 rating INTEGER
             );
             """)
-
-    with con:
         con.execute("""
             CREATE TABLE DIARY (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                movie_id INTEGER,
+                diaryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                id INTEGER,
                 like BOOLEAN,
                 rewatch BOOLEAN,
                 rating INTEGER
             );
             """)
 
-    with con:
         con.execute("""
             CREATE TABLE TMDB (
                 id INTEGER NOT NULL PRIMARY KEY,
                 tmdb INTEGER,
                 tv BOOLEAN
+            );
+            """)
+
+        con.execute("""
+            CREATE TABLE NAMES (
+                id INTEGER NOT NULL PRIMARY KEY,
+                name STRING
+            );
+            """)
+
+        con.execute("""
+            CREATE TABLE PEOPLE (
+                moviepersonID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                personID INTEGER,
+                tmdb INTEGER,
+                tv BOOLEAN,
+                role STRING
             );
             """)
