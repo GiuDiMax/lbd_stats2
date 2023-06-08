@@ -19,16 +19,13 @@ def credits(url, tmdb):
         for person in j['cast']:
             if '(uncredited)' not in person['character']:
                 pep.append({'id': person['id'], 'name': person['name'], 'tmdb': tmdb, 'tv': False, 'role': 'a'})
-        sem.acquire()
-        people = people + pep
-        sem.release()
     if 'crew' in j:
         for person in j['crew']:
             if person['job'] in crewlist:
                 pep.append({'id': person['id'], 'name': person['name'], 'tmdb': tmdb, 'tv': False, 'role': crewlist[person['job']]})
-        sem.acquire()
-        people = people + pep
-        sem.release()
+    sem.acquire()
+    people = people + pep
+    sem.release()
 
 
 def setPeople():

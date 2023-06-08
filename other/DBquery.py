@@ -1,13 +1,13 @@
 import sqlite3 as sl
 from config import *
+import pandas as pd
 
 query = """
-SELECT * FROM PEOPLE p LEFT JOIN NAMES n ON p.personID = n.id
+SELECT * FROM PEOPLE p
+GROUP BY p.personID
 """
 
 con = sl.connect(dbname)
 with con:
-    data = con.execute(query)
-
-for line in data:
-    print(line)
+    df = pd.read_sql_query(query, con)
+print(df)

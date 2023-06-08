@@ -23,7 +23,7 @@ def add_diaryDB(data):
     con = sl.connect(dbname)
     with con:
         con.execute('DELETE FROM DIARY')
-    sql = 'INSERT INTO DIARY (id, like, rewatch, rating) values(?, ?, ?, ?)'
+    sql = 'INSERT INTO DIARY (id, date, like, rewatch, rating) values(?, ?, ?, ?, ?)'
     with con:
         con.executemany(sql, data)
 
@@ -41,7 +41,7 @@ def add_people(data):
     con = sl.connect(dbname)
     with con:
         con.execute('DELETE FROM PEOPLE')
-    sql = 'INSERT INTO PEOPLE (personID, tmdb, tv, role) values(?, ?, ?, ?)'
+    sql = 'INSERT OR IGNORE INTO PEOPLE (id, tmdb, tv, role) values(?, ?, ?, ?)'
     with con:
         con.executemany(sql, data)
 

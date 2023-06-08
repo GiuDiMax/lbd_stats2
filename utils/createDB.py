@@ -24,9 +24,10 @@ def initializedb():
         con.execute("""
             CREATE TABLE DIARY (
                 id INTEGER,
+                date DATE,
                 like BOOLEAN,
+                rating INTEGER,
                 rewatch BOOLEAN,
-                rating INTEGER
             );
             """)
 
@@ -47,9 +48,10 @@ def initializedb():
 
         con.execute("""
             CREATE TABLE PEOPLE (
-                personID INTEGER,
-                tmdb INTEGER,
+                id INTEGER NOT NULL,
+                tmdb INTEGER NOT NULL,
                 tv BOOLEAN,
-                role STRING
+                role STRING,
+                constraint PK PRIMARY KEY (id, tmdb, tv, role)
             );
             """)

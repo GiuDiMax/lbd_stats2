@@ -7,6 +7,6 @@ from utils.setPeople import setPeople
 
 initializedb()
 get_watched(username)
-get_diary(username)
+#get_diary(username)
 lbd_to_tmdb()
 setPeople()

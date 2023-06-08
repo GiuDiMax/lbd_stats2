@@ -5,11 +5,11 @@ con = sl.connect(dbname)
 with con:
     con.execute('DROP TABLE PEOPLE;')
     con.execute("""
-        CREATE TABLE PEOPLE (
-            moviepersonID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-            personID INTEGER,
-            tmdb INTEGER,
-            tv BOOLEAN,
-            role STRING
-        );
+            CREATE TABLE PEOPLE (
+                id INTEGER NOT NULL,
+                tmdb INTEGER NOT NULL,
+                tv BOOLEAN,
+                role STRING,
+                constraint PK PRIMARY KEY (id, tmdb, tv, role)
+            );
         """)
