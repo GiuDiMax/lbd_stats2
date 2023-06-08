@@ -2,7 +2,7 @@ import sqlite3 as sl
 from config import *
 
 query = """
-SELECT * FROM TMDB
+SELECT * FROM PEOPLE p LEFT JOIN NAMES n ON p.personID = n.id
 """
 
 con = sl.connect(dbname)
